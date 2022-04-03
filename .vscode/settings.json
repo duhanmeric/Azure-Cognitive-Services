@@ -1,0 +1,9 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}",
+        "client{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/cefffe10-24b4-4251-8797-a097d992c16a/resourceGroups/bulutbilisim-appservice/providers/Microsoft.Web/sites/process-audio",
+    "appService.deploySubpath": "."
+}

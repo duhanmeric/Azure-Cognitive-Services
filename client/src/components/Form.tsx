@@ -6,8 +6,10 @@ import UserInput from "./UserInput";
 
 const Form = () => {
   const [textInput, setTextInput] = useState("");
-  const { loading, setLoading, recordedVoices, setRecordedVoices } =
+
+  const { setLoading, setRecordedAudios, currentAudio, setCurrentAudio } =
     useLoading();
+
   const URL = "http://localhost:8000/audio";
   const headers = {
     "Content-Type": "application/json",
@@ -22,8 +24,9 @@ const Form = () => {
       .post(URL, JSON.stringify({ message: textInput }), { headers })
       .then((response) => {
         console.log(response.data);
+
         setLoading(false);
-        setRecordedVoices([...recordedVoices, response.data as never]);
+        setCurrentAudio(response.data.id + ".mp3");
       })
       .catch((error) => {
         console.log(error);
@@ -31,8 +34,31 @@ const Form = () => {
   };
 
   useEffect(() => {
-    console.log(loading, recordedVoices);
-  }, [loading, recordedVoices]);
+    async function importFile() {
+      if (currentAudio) {
+        await import(`../audios/${currentAudio}`)
+          .then((audioFile) => {
+            console.log(audioFile);
+          })
+          .catch((err) => {
+            return;
+          });
+      }
+    }
+    importFile();
+  }, [currentAudio]);
+
+  useEffect(() => {
+    axios
+      .get(URL)
+      .then((response) => {
+        console.log(response);
+        setRecordedAudios(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [setRecordedAudios]);
 
   return (
     <form id="input-form" onSubmit={(e) => handleSubmit(e)}>

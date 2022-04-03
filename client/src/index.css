@@ -28,7 +28,7 @@ body,
 
 .app-title {
   text-align: center;
-  margin-bottom: 150px;
+  margin-bottom: 50px;
 }
 
 .user-textarea {
@@ -54,4 +54,22 @@ body,
   width: 500px;
   height: 300px;
   border: 1px solid #a7a7a7;
+  padding: 10px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.preview p {
+  margin-bottom: 20px;
+}
+
+.loading {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.loadingDiv {
+  width: 50px;
+  height: 50px;
 }

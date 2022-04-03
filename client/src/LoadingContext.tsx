@@ -3,8 +3,10 @@ import React, { createContext, FC, useContext, useState } from "react";
 interface Context {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  recordedVoices: never[];
-  setRecordedVoices: React.Dispatch<React.SetStateAction<never[]>>;
+  recordedAudios: never[];
+  setRecordedAudios: React.Dispatch<React.SetStateAction<never[]>>;
+  currentAudio: string;
+  setCurrentAudio: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const LoadingContext = createContext<Context>({} as Context);
@@ -12,11 +14,19 @@ const LoadingContext = createContext<Context>({} as Context);
 // component - using by App.tsx - it provides user info to all components
 export const LoadingProvider: FC = (props) => {
   const [loading, setLoading] = useState(false);
-  const [recordedVoices, setRecordedVoices] = useState([]);
+  const [recordedAudios, setRecordedAudios] = useState([]);
+  const [currentAudio, setCurrentAudio] = useState("");
 
   return (
     <LoadingContext.Provider
-      value={{ loading, setLoading, recordedVoices, setRecordedVoices }}
+      value={{
+        currentAudio,
+        setCurrentAudio,
+        loading,
+        setLoading,
+        recordedAudios,
+        setRecordedAudios,
+      }}
     >
       {props.children}
     </LoadingContext.Provider>
