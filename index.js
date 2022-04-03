@@ -6,25 +6,29 @@ const fs = require("fs");
 const { promisify } = require("util");
 const { v4 } = require("uuid");
 const { serviceRegion, subscriptionKey } = require("./keys");
+const serveStatic = require("serve-static");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(process.cwd() + "/build"));
+
+const staticFileMiddleware = serveStatic(
+  path.join(__dirname + "/client/build")
+);
+app.use(staticFileMiddleware);
 
 const writeFile = promisify(fs.writeFile);
 const readDir = promisify(fs.readdir);
 
-const audioFolder = "./client/src/audios/";
-// const audioFolder = path.join(__dirname + "\\client\\src\\audios/");
+const audioFolder = path.join(__dirname + "/audios/");
 
 if (!fs.existsSync(audioFolder)) {
   fs.mkdirSync(audioFolder);
 }
 
 app.get("/", (req, res) => {
-  res.sendFile(process.cwd() + "/build/index.html");
+  res.render(path.join(__dirname, "/client/build/index.html"));
 });
 
 app.get("/audio", (request, response) => {
@@ -33,14 +37,17 @@ app.get("/audio", (request, response) => {
   readDir(audioFolder, (err, files) => {
     if (err) console.log(err);
     else {
-      console.log("\nCurrent directory filenames:");
       files.forEach((file) => {
         allAudioFiles.push(file);
       });
-      // console.log(allAudioFiles);
       response.send(allAudioFiles);
     }
   });
+});
+
+app.get("/audios/:id", (request, response) => {
+  const { id } = request.params;
+  response.sendFile(audioFolder + id);
 });
 
 app.post("/audio", (request, response) => {
@@ -58,9 +65,14 @@ app.post("/audio", (request, response) => {
     const audio = result.audioData;
     synthesizer.close();
     const buffer = Buffer.from(audio);
+
+    response.writeHead(200, {
+      "Content-Type": "audio/mpeg",
+    });
+
     writeFile(audioFolder + permanentId + ".mp3", buffer, "base64").then(() => {
-      console.log("here");
-      response.status(201).json({ id: permanentId });
+      // response.status(201).json({ id: permanentId });
+      response.end("/audios/" + permanentId + ".mp3");
     });
     synthesizer = undefined;
   });
