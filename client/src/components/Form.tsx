@@ -15,7 +15,7 @@ const Form = () => {
     setCurrentAudio,
   } = useLoading();
 
-  const URL = "http://localhost:8080/audio";
+  const URL = "https://bulut-final.herokuapp.com/audio";
   const headers = {
     "Content-Type": "application/json",
   };
