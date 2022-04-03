@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(process.cwd() + "/build/"));
+app.use(express.static(process.cwd() + "/build"));
 
 const writeFile = promisify(fs.writeFile);
 const readDir = promisify(fs.readdir);

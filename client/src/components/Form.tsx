@@ -10,7 +10,7 @@ const Form = () => {
   const { setLoading, setRecordedAudios, currentAudio, setCurrentAudio } =
     useLoading();
 
-  const URL = "http://localhost:8000/audio";
+  const URL = "http://localhost:8080/audio";
   const headers = {
     "Content-Type": "application/json",
   };
