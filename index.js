@@ -13,11 +13,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const staticFileMiddleware = serveStatic(
-  path.join(__dirname + "/client/build")
-);
-app.use(staticFileMiddleware);
-
 const writeFile = promisify(fs.writeFile);
 const readDir = promisify(fs.readdir);
 
@@ -27,8 +22,11 @@ if (!fs.existsSync(audioFolder)) {
   fs.mkdirSync(audioFolder);
 }
 
+const staticFileMiddleware = serveStatic(path.join(__dirname + "/build"));
+app.use(staticFileMiddleware);
+
 app.get("/", (req, res) => {
-  res.render(path.join(__dirname, "/client/build/index.html"));
+  res.render(path.join(__dirname, "/build/index.html"));
 });
 
 app.get("/audio", (request, response) => {
