@@ -18,6 +18,8 @@ const readDir = promisify(fs.readdir);
 
 const audioFolder = path.join(__dirname + "/audios/");
 
+console.log(path.join(__dirname + "/audios/"));
+
 if (!fs.existsSync(audioFolder)) {
   fs.mkdirSync(audioFolder);
 }
@@ -26,7 +28,7 @@ const staticFileMiddleware = serveStatic(path.join(__dirname + "/build"));
 app.use(staticFileMiddleware);
 
 app.get("/", (req, res) => {
-  res.render(path.join(__dirname, "/build/index.html"));
+  res.sendFile(path.join(__dirname, "/build/index.html"));
 });
 
 app.get("/audio", (request, response) => {
@@ -36,7 +38,10 @@ app.get("/audio", (request, response) => {
     if (err) console.log(err);
     else {
       files.forEach((file) => {
-        allAudioFiles.push(file);
+        allAudioFiles.push({
+          id: Math.random() * 10000,
+          file: `https://bulut-final.herokuapp.com/audios/${file}`,
+        });
       });
       response.send(allAudioFiles);
     }
@@ -50,6 +55,7 @@ app.get("/audios/:id", (request, response) => {
 
 app.post("/audio", (request, response) => {
   const { message } = request.body;
+  console.log("xd");
 
   const speechConfig = speechsdk.SpeechConfig.fromSubscription(
     subscriptionKey,
@@ -69,7 +75,6 @@ app.post("/audio", (request, response) => {
     });
 
     writeFile(audioFolder + permanentId + ".mp3", buffer, "base64").then(() => {
-      // response.status(201).json({ id: permanentId });
       response.end("/audios/" + permanentId + ".mp3");
     });
     synthesizer = undefined;

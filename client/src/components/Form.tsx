@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLoading } from "../LoadingContext";
 import axios from "axios";
 import Button from "./Button";
@@ -7,13 +7,7 @@ import UserInput from "./UserInput";
 const Form = () => {
   const [textInput, setTextInput] = useState("");
 
-  const {
-    setLoading,
-    recordedAudios,
-    setRecordedAudios,
-    currentAudio,
-    setCurrentAudio,
-  } = useLoading();
+  const { setLoading, setRecordedAudios, setCurrentAudio } = useLoading();
 
   const URL = "https://bulut-final.herokuapp.com/audio";
   const headers = {
@@ -34,7 +28,7 @@ const Form = () => {
           ...p,
           {
             id: (Math.random() * 100000).toString(),
-            file: `http://localhost:8080${response.data}`,
+            file: `https://bulut-final.herokuapp.com${response.data}`,
           },
         ]);
       })
@@ -42,10 +36,6 @@ const Form = () => {
         console.log(error);
       });
   };
-
-  useEffect(() => {
-    localStorage.setItem("audios", JSON.stringify(recordedAudios));
-  }, [recordedAudios]);
 
   return (
     <form id="input-form" onSubmit={(e) => handleSubmit(e)}>

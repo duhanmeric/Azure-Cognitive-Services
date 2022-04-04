@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { useLoading } from "../LoadingContext";
 
 const Preview = () => {
-  const { recordedAudios } = useLoading();
+  const { recordedAudios, setRecordedAudios } = useLoading();
+
+  const URL = "https://bulut-final.herokuapp.com/audio";
 
   useEffect(() => {
-    console.log(recordedAudios);
-  }, [recordedAudios]);
+    axios.get(URL).then((response) => {
+      setRecordedAudios(response.data);
+    });
+  }, [setRecordedAudios]);
 
   return (
     <div className="preview">
