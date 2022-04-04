@@ -25,12 +25,12 @@ if (!fs.existsSync(audioFolder)) {
 }
 
 const staticFileMiddleware = serveStatic(
-  path.join(__dirname + "/client/build")
+  path.join(__dirname + "/client/build/")
 );
 app.use(staticFileMiddleware);
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/audio", (request, response) => {
